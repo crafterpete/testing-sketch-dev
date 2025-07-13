@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolely.ai - Generative AI Fantasy Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        }
+        .fantasy-glow {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .map-point {
+            transition: all 0.3s ease;
+        }
+        .map-point:hover {
+            transform: scale(1.2);
+            filter: brightness(1.3);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fantasy-gold': '#d4af37',
+                        'fantasy-purple': '#6b46c1',
+                        'fantasy-blue': '#3b82f6',
+                        'fantasy-green': '#22c55e',
+                        'fantasy-dark': '#1e1b4b',
+                        'fantasy-light': '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-fantasy-dark/90 backdrop-blur-sm border-b border-fantasy-gold/20 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-fantasy-gold to-yellow-600 rounded-full flex items-center justify-center">
+                        <span class="text-fantasy-dark font-bold text-sm">R</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-fantasy-gold">Rolely.ai</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#about" class="text-fantasy-light hover:text-fantasy-gold transition-colors">About</a>
+                    <a href="#features" class="text-fantasy-light hover:text-fantasy-gold transition-colors">Features</a>
+                    <a href="#play" class="text-fantasy-light hover:text-fantasy-gold transition-colors">Play</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 px-4 text-center">
+        <div class="absolute inset-0 bg-gradient-to-r from-fantasy-purple/20 to-fantasy-blue/20 backdrop-blur-sm"></div>
+        <div class="relative z-10 container mx-auto">
+            <h1 class="text-5xl md:text-7xl font-bold text-fantasy-gold mb-6 floating">
+                Enter Any World
+            </h1>
+            <p class="text-xl md:text-2xl text-fantasy-light mb-8 max-w-3xl mx-auto">
+                Rolely.ai is a generative AI game that immerses you into any world you can imagine.
+                Step into your own personalized simulation and begin your adventure.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <div class="bg-fantasy-dark/50 backdrop-blur-sm px-6 py-3 rounded-lg border border-fantasy-gold/30">
+                    <span class="text-fantasy-gold font-semibold">✨ Infinite Worlds</span>
+                </div>
+                <div class="bg-fantasy-dark/50 backdrop-blur-sm px-6 py-3 rounded-lg border border-fantasy-gold/30">
+                    <span class="text-fantasy-gold font-semibold">🎮 AI-Powered</span>
+                </div>
+                <div class="bg-fantasy-dark/50 backdrop-blur-sm px-6 py-3 rounded-lg border border-fantasy-gold/30">
+                    <span class="text-fantasy-gold font-semibold">🌟 Immersive</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <!-- Game Interface -->
+            <div class="order-2 lg:order-1">
+                <div class="bg-fantasy-dark/30 backdrop-blur-sm rounded-lg border border-fantasy-gold/30 p-6">
+                    <h2 class="text-2xl font-bold text-fantasy-gold mb-4">Begin Your Adventure</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="world-prompt" class="block text-fantasy-light mb-2 font-semibold">
+                                Describe the world you want to explore:
+                            </label>
+                            <textarea
+                                id="world-prompt"
+                                placeholder="Enter your world description... (e.g., 'a magical forest where time moves differently')"
+                                class="w-full h-32 p-4 bg-fantasy-dark/50 border border-fantasy-gold/30 rounded-lg text-fantasy-light placeholder-gray-400 focus:border-fantasy-gold focus:outline-none focus:ring-2 focus:ring-fantasy-gold/20 resize-none"
+                            ></textarea>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-fantasy-light/80 text-sm">Quick examples:</span>
+                            <button onclick="setPrompt('magic exists and dragons roam free')" class="text-xs bg-fantasy-purple/20 hover:bg-fantasy-purple/30 text-fantasy-gold px-3 py-1 rounded-full border border-fantasy-gold/20 transition-colors">
+                                magic exists and dragons roam free
+                            </button>
+                            <button onclick="setPrompt('I am a space explorer on an alien planet')" class="text-xs bg-fantasy-purple/20 hover:bg-fantasy-purple/30 text-fantasy-gold px-3 py-1 rounded-full border border-fantasy-gold/20 transition-colors">
+                                I am a space explorer on an alien planet
+                            </button>
+                            <button onclick="setPrompt('medieval times with mystical creatures')" class="text-xs bg-fantasy-purple/20 hover:bg-fantasy-purple/30 text-fantasy-gold px-3 py-1 rounded-full border border-fantasy-gold/20 transition-colors">
+                                medieval times with mystical creatures
+                            </button>
+                        </div>
+
+                        <button
+                            onclick="startAdventure()"
+                            class="w-full bg-gradient-to-r from-fantasy-gold to-yellow-600 text-fantasy-dark font-bold py-3 px-6 rounded-lg hover:from-fantasy-gold/90 hover:to-yellow-600/90 transition-all duration-200 fantasy-glow"
+                        >
+                            Start Adventure
+                        </button>
+
+                        <div id="game-response" class="hidden bg-fantasy-purple/20 border border-fantasy-gold/30 rounded-lg p-4">
+                            <h3 class="text-fantasy-gold font-semibold mb-2">Your Adventure Begins:</h3>
+                            <p id="response-text" class="text-fantasy-light leading-relaxed mb-3"></p>
+                            <div class="text-fantasy-light/60 text-sm">
+                                Generated at <span id="response-time"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-sm text-fantasy-light/80">
+                        <p class="font-semibold mb-2">Tips for better adventures:</p>
+                        <ul class="list-disc list-inside space-y-1 text-xs">
+                            <li>Be specific about the setting and atmosphere</li>
+                            <li>Include interesting elements like magic, technology, or creatures</li>
+                            <li>Think about what makes your world unique</li>
+                            <li>Press Enter to start your adventure</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fantasy Map -->
+            <div class="order-1 lg:order-2">
+                <div class="bg-fantasy-dark/30 backdrop-blur-sm rounded-lg border border-fantasy-gold/30 p-6">
+                    <h2 class="text-2xl font-bold text-fantasy-gold mb-4">Fantasy Realm Map</h2>
+                    <div class="relative">
+                        <canvas id="fantasyMap" width="400" height="300" class="border border-fantasy-gold/20 rounded-lg cursor-crosshair fantasy-glow"></canvas>
+                        
+                        <div id="map-tooltip" class="hidden absolute top-2 right-2 bg-fantasy-dark/80 backdrop-blur-sm rounded-lg p-3 border border-fantasy-gold/30">
+                            <p id="terrain-name" class="text-fantasy-gold text-sm font-semibold"></p>
+                            <p id="coords" class="text-fantasy-light text-xs"></p>
+                            <p id="elevation" class="text-fantasy-light text-xs"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-sm text-fantasy-light/80">
+                        <p>Hover over terrain to explore • Click to select a location</p>
+                        <div id="selected-location" class="hidden mt-2 p-2 bg-fantasy-purple/20 rounded border border-fantasy-gold/20">
+                            <p id="selected-text" class="text-fantasy-gold"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-fantasy-dark/80 backdrop-blur-sm border-t border-fantasy-gold/20 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-fantasy-light/80">
+                © 2024 Rolely.ai - Powered by AI imagination
+            </p>
+            <div class="mt-4 flex justify-center space-x-6">
+                <a href="#" class="text-fantasy-light/60 hover:text-fantasy-gold transition-colors">Privacy</a>
+                <a href="#" class="text-fantasy-light/60 hover:text-fantasy-gold transition-colors">Terms</a>
+                <a href="#" class="text-fantasy-light/60 hover:text-fantasy-gold transition-colors">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fantasy Map Generator
+        const TerrainType = {
+            MOUNTAIN: 'mountain',
+            FOREST: 'forest',
+            WATER: 'water',
+            PLAINS: 'plains',
+            DESERT: 'desert',
+            MAGICAL: 'magical'
+        };
+
+        function noise(x, y, seed = 12345) {
+            let n = Math.sin(x * 12.9898 + y * 78.233 + seed) * 43758.5453;
+            return n - Math.floor(n);
+        }
+
+        function getTerrainType(elevation, x, y, seed) {
+            const terrainNoise = noise(x * 0.02, y * 0.02, seed + 1000);
+            const magicNoise = noise(x * 0.05, y * 0.05, seed + 2000);
+            
+            if (magicNoise > 0.85) return TerrainType.MAGICAL;
+            if (elevation < 0.3) return TerrainType.WATER;
+            if (elevation > 0.7) return TerrainType.MOUNTAIN;
+            if (terrainNoise > 0.6) return TerrainType.FOREST;
+            if (terrainNoise > 0.3) return TerrainType.PLAINS;
+            return TerrainType.DESERT;
+        }
+
+        function generateFantasyMap(width, height) {
+            const seed = Date.now();
+            const points = [];
+            
+            for (let y = 0; y < height; y += 15) {
+                for (let x = 0; x < width; x += 15) {
+                    const offsetX = x + (Math.random() - 0.5) * 20;
+                    const offsetY = y + (Math.random() - 0.5) * 20;
+                    
+                    if (offsetX >= 0 && offsetX < width && offsetY >= 0 && offsetY < height) {
+                        let elevation = 0;
+                        let frequency = 0.01;
+                        let amplitude = 1;
+                        
+                        for (let i = 0; i < 4; i++) {
+                            elevation += noise(offsetX * frequency, offsetY * frequency, seed + i) * amplitude;
+                            frequency *= 2;
+                            amplitude *= 0.5;
+                        }
+                        
+                        elevation = Math.max(0, Math.min(1, elevation));
+                        const terrain = getTerrainType(elevation, offsetX, offsetY, seed);
+                        
+                        points.push({
+                            x: offsetX,
+                            y: offsetY,
+                            terrain,
+                            elevation,
+                            id: `${offsetX}-${offsetY}`
+                        });
+                    }
+                }
+            }
+            
+            return points;
+        }
+
+        function drawMap(canvas, points) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#1e1b4b');
+            gradient.addColorStop(0.5, '#312e81');
+            gradient.addColorStop(1, '#1e1b4b');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections
+            ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+            ctx.lineWidth = 1;
+            
+            points.forEach(point => {
+                const nearbyPoints = points.filter(p => {
+                    const distance = Math.sqrt((p.x - point.x) ** 2 + (p.y - point.y) ** 2);
+                    return distance < 50 && distance > 0;
+                });
+                
+                nearbyPoints.forEach(nearby => {
+                    ctx.beginPath();
+                    ctx.moveTo(point.x, point.y);
+                    ctx.lineTo(nearby.x, nearby.y);
+                    ctx.stroke();
+                });
+            });
+
+            // Draw terrain points
+            points.forEach(point => {
+                const { x, y, terrain, elevation } = point;
+                const size = 3 + elevation * 2;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                
+                switch (terrain) {
+                    case TerrainType.MOUNTAIN:
+                        ctx.fillStyle = `rgba(139, 69, 19, ${0.6 + elevation * 0.4})`;
+                        break;
+                    case TerrainType.FOREST:
+                        ctx.fillStyle = `rgba(34, 197, 94, ${0.6 + elevation * 0.4})`;
+                        break;
+                    case TerrainType.WATER:
+                        ctx.fillStyle = `rgba(59, 130, 246, ${0.6 + elevation * 0.4})`;
+                        break;
+                    case TerrainType.PLAINS:
+                        ctx.fillStyle = `rgba(132, 204, 22, ${0.6 + elevation * 0.4})`;
+                        break;
+                    case TerrainType.DESERT:
+                        ctx.fillStyle = `rgba(251, 191, 36, ${0.6 + elevation * 0.4})`;
+                        break;
+                    case TerrainType.MAGICAL:
+                        ctx.fillStyle = `rgba(168, 85, 247, ${0.6 + elevation * 0.4})`;
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = '#a855f7';
+                        break;
+                }
+                
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+        }
+
+        function getTerrainName(terrain) {
+            switch (terrain) {
+                case TerrainType.MOUNTAIN: return 'Mountain';
+                case TerrainType.FOREST: return 'Forest';
+                case TerrainType.WATER: return 'Water';
+                case TerrainType.PLAINS: return 'Plains';
+                case TerrainType.DESERT: return 'Desert';
+                case TerrainType.MAGICAL: return 'Magical Realm';
+                default: return 'Unknown';
+            }
+        }
+
+        // Game functionality
+        function setPrompt(text) {
+            document.getElementById('world-prompt').value = text;
+        }
+
+        function startAdventure() {
+            const prompt = document.getElementById('world-prompt').value.trim();
+            if (!prompt) {
+                alert('Please enter a world description to begin your adventure!');
+                return;
+            }
+
+            const responses = [
+                `You find yourself in a mystical realm where ${prompt.toLowerCase()}. The air shimmers with magical energy as you step forward into this new world. What would you like to do first?`,
+                `Welcome, brave adventurer! Your journey begins in a land where ${prompt.toLowerCase()}. Ancient runes glow softly on nearby stones, and you hear distant sounds of adventure calling. Choose your path wisely.`,
+                `The world materializes around you as ${prompt.toLowerCase()}. You stand at the threshold of infinite possibilities, your destiny unwritten. The very fabric of reality bends to your will here.`,
+                `As reality shifts and reforms, you emerge into a realm where ${prompt.toLowerCase()}. Ethereal lights dance in the distance, and you sense that great adventures await. What is your first move?`
+            ];
+            
+            const randomIndex = Math.floor(Math.random() * responses.length);
+            const response = responses[randomIndex];
+            
+            document.getElementById('response-text').textContent = response;
+            document.getElementById('response-time').textContent = new Date().toLocaleTimeString();
+            document.getElementById('game-response').classList.remove('hidden');
+        }
+
+        // Initialize map
+        let mapData = [];
+        let hoveredPoint = null;
+        let selectedPoint = null;
+
+        window.addEventListener('load', function() {
+            const canvas = document.getElementById('fantasyMap');
+            mapData = generateFantasyMap(400, 300);
+            drawMap(canvas, mapData);
+
+            // Map interactions
+            canvas.addEventListener('mousemove', function(event) {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                let closest = null;
+                let minDistance = Infinity;
+
+                mapData.forEach(point => {
+                    const distance = Math.sqrt((point.x - x) ** 2 + (point.y - y) ** 2);
+                    if (distance < 20 && distance < minDistance) {
+                        closest = point;
+                        minDistance = distance;
+                    }
+                });
+
+                hoveredPoint = closest;
+                
+                if (hoveredPoint) {
+                    document.getElementById('terrain-name').textContent = getTerrainName(hoveredPoint.terrain);
+                    document.getElementById('coords').textContent = `Coords: (${Math.round(hoveredPoint.x)}, ${Math.round(hoveredPoint.y)})`;
+                    document.getElementById('elevation').textContent = `Elevation: ${hoveredPoint.elevation.toFixed(2)}`;
+                    document.getElementById('map-tooltip').classList.remove('hidden');
+                } else {
+                    document.getElementById('map-tooltip').classList.add('hidden');
+                }
+            });
+
+            canvas.addEventListener('click', function() {
+                if (hoveredPoint) {
+                    selectedPoint = hoveredPoint;
+                    document.getElementById('selected-text').textContent = 
+                        `Selected: ${getTerrainName(selectedPoint.terrain)} at (${Math.round(selectedPoint.x)}, ${Math.round(selectedPoint.y)})`;
+                    document.getElementById('selected-location').classList.remove('hidden');
+                }
+            });
+
+            // Add Enter key support for game input
+            document.getElementById('world-prompt').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    startAdventure();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
